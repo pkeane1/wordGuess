@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Word Game</title>
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <script src="logic.js"> </script>  
+</head>
+<body>
+    <div class="container">
+         <div class="row py-3 px-3">
+             <div class="col-12 col-md-8 text-black text-center py-2">
+                        <div class="row">
+                            <div class="col-6 mb-3 bg-warning my-3 rounded border border-secondary" id="main">
+                                    <h1>WORD GUESS</h1>
+                                    <h2 class="editionLine text-black">A Sports Edition</h2>
+                                    <div class="separator-holder clearfix">
+                                        <div class="separator"></div> 
+                                    </div>
+                                    <p>Any city, any sport, any team!</p>
+                                    <p>Can you guess which team is the hidden word??</p>
+                            </div>
+                        </div>
+                        <div class="row ">
+                              
+                            <audio controls src="nfl.mp3" type ="audio/ogg" ></audio controls>
+                            <div class="col-12 mb-3"></div>
+        
+                        </div>
+                    
+                        
+            </div>
+                    <div class="col-12 col-md-4 border border-secondary rounded text-center py-2 text-black bg-warning"> 
+                            
+                                <p class="pt-3">Wins</p>
+                                <p id="win-counter">0</p>
+                                <p class="pt-3">Loses</p>
+                                <p id="loss-counter">0</p>
+                            
+                            <p class="pt-3">Current Word</p>
+                            <p id="puzzle-state"></p>
+                            <p class="pt-3">Number of Guesses Remaining</p>
+                            <p id="guesses-left">9</p>
+                            <p class="pt-3">Wrong Guesses</p>
+                            <p id="wrong-guesses"></p>
+                
+            </div>
+        </div> <!--End Row 1-->
+                
+        
+    </div> <!--End Container-->
+  
+</body>
+</html>
