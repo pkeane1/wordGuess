@@ -2,17 +2,13 @@
 var gameWords = ["yankees", "sixers", "bruins", "ravens","dolphins"]
 //1.1
 function randomWord(gameWords) {
-  var guessWord = gameWords[Math.floor(Math.random() * gameWords.length)];
     return gameWords[Math.floor(Math.random() * gameWords.length)];
-};
+}
+
+
 //1.2
 function isCorrectGuess(word,letter) {
-    if(word.indexOf(letter) === -1) {
-        return false 
-    }  
-    else {
-        return true
-    } 
+    return word.indexOf(letter) >= 0;
 }
 
 //1.3
@@ -37,16 +33,16 @@ function fillBlanks(word,puzzle,letter) {
 
 //1.5
 function setupRound(word) {
-var round = {
-    word: word, 
-    guessesLeft: 9,
-    wrongGuesses: [],
-    puzzleState: []
+    var blanks = getBlanks(word);
 
-}
- return round;
-}
-
+    return {
+      word: word,
+      guessesLeft: 9,
+      wrongGuesses: [],
+      puzzleState: blanks
+    };
+  }
+  
 
 
 //1.6
@@ -59,15 +55,10 @@ function updateRound(round,letter) {
     }
     return round;
 }
-["h","_","l","l","_"]
+
 
 //1.7
 function hasWon(puzzleState) {
-
-    // if( !puzzleState.indexOf("_") === -1){
-    //     return true
-    // }
-    // return false
 
    for (var i = 0; i < puzzleState.length; i++) {
         if (puzzleState[i] === "_") {
@@ -99,11 +90,12 @@ function isEndOfRound(round) {
 //1.10 set up game
 
 function setupGame(words,wins,losses) { 
+    var round = setupRound(randomWord(words));
     var game = {
         words: words,
         wins: wins,
         losses:losses,
-        round:setupRound(randomWord(words))
+        round:round
 
 
     }
@@ -122,17 +114,19 @@ function setupGame(words,wins,losses) {
 
 //1.11 start new round
 function startNewRound(game) {
-    if(hasWon(game.round.puzzleState)) {
-        alert(" winner " +  game.round.word)
-        game.wins++;
+        var currentRound = game.round;
 
-    } else if(hasLost(game.round.guessesLeft)) {
-        alert(" Loser " + game.round.word)
-        game.losses++;
-    }
-    setupRound(randomWord(gameWords));
-}
-
+        if (hasWon(currentRound.puzzleState)) {
+          game.wins += 1;
+          alert("You won! The word was " + currentRound.word);
+        } else if (hasLost(currentRound.guessesLeft)) {
+          game.losses += 1;
+          alert("You lost :( The word was " + currentRound.word);
+        }
+      
+        game.round = setupRound(randomWord(game.words));
+      }
+      
 //1.12 
 var wins = 0
 var losses = 0
@@ -151,35 +145,46 @@ var myGame = setupGame(gameWords,0,0);
 //     }
 // }
 
-var x = document.getElementById("puzzle-state").innerHTML = myGame.round.puzzleState.join(" ");
+// var x = document.getElementById("puzzle-state").innerHTML = myGame.round.puzzleState.join(" ");
 
-document.addEventListener("keyup", gamePlay) 
-function gamePlay(event){
-            console.log(event.key);
+// document.addEventListener("keyup", gamePlay) 
+// function gamePlay(event){
+//             console.log(event.key);
 
-            isCorrectGuess(myGame.round.word, gamePlay);
-            fillBlanks(myGame.round.puzzleState, myGame.round.puzzleState, gamePlay);
-            updateRound(myGame.round, gamePlay);
-            hasWon(myGame.round.puzzleState);
-            hasLost(myGame.round.guessesLeft);
+//             isCorrectGuess(myGame.round.word, gamePlay);
+//             fillBlanks(myGame.round.puzzleState, myGame.round.puzzleState, gamePlay);
+//             updateRound(myGame.round, gamePlay);
+//             hasWon(myGame.round.puzzleState);
+//             hasLost(myGame.round.guessesLeft);
 
-            if(isEndOfRound(myGame.round)) {
-                myGame = startNewRound(myGame)
-                myGame = setupRound(randomWord(gameWords));
-            }
-
-
-document.getElementById("puzzle-state").innerText = myGame.round.puzzleState.join(" ");
-document.getElementById("wrong-guesses").innerText = myGame.round.wrongGuesses;
-
-document.getElementById("win-counter").innerText = myGame.wins;
-document.getElementById("loss-counter").innerText = myGame.losses;
-document.getElementById("guesses-left").innerText = myGame.round.guessesLeft;
-console.log(myGame);
+//             if(isEndOfRound(myGame.round)) {
+//                 myGame = startNewRound(myGame)
+//                 myGame = setupRound(randomWord(gameWords));
+//             }
 
 
 
-
-
-
-}
+function updatePage(game) {
+    document.getElementById("guesses-left").innerHTML = game.round.guessesLeft;
+    document.getElementById("puzzle-state").innerHTML = game.round.puzzleState.join(" ");
+    document.getElementById("wrong-guesses").innerHTML = game.round.wrongGuesses.join(" ");
+    document.getElementById("win-counter").innerHTML = game.wins;
+    document.getElementById("loss-counter").innerHTML = game.losses;
+  }
+  
+  // function to handle keypress
+  document.onkeyup = function handleKeypress(event) {
+    if (event.keyCode >= 65 && event.keyCode <= 90) {
+      var letterGuessed = event.key.toLowerCase();
+      updateRound(myGame.round, letterGuessed);
+      if (isEndOfRound(myGame.round)) {
+        startNewRound(myGame);
+      }
+      updatePage(myGame);
+    }
+  };
+  
+  // on page load, set up info
+  updatePage(myGame);
+  
+  
